@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Js Data Handling</title>
+    <style>
+        a {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 id="text1"></h2>
+
+    <a href="./chart.html">Goto Chart</a>
+    <a href="./jServiceApi.html">Goto Questions</a>
+    
+    <script>
+        fetchCSV('./temp.csv').catch(error => {
+            console.log('Error Ocurred: ',error);
+        });
+        async function fetchCSV(filename) {
+            const response = await fetch(filename);
+            const text = await response.text();
+            const rows = text.split('\n');
+            rows.forEach(row => {
+                const column = row.split(',');
+                const name = column[2];
+                const tasks = column[3];
+                console.log(name, "=>",tasks);
+            })
+            // console.log('Rows: ',rows);
+
+            document.getElementById('text1').innerHTML = rows;
+        }
+
+    </script>
+</body>
+
+</html>

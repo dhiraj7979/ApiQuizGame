@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Page</title>
+
+    <style>
+        #chart1 {
+            height: 400px;
+            overflow: hidden;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.4.1/dist/chart.min.js"></script>
+</head>
+
+<body>
+
+    <canvas id="chart1"></canvas>
+
+    <script>
+
+        chartPlot();
+
+        async function getData(dataUrl) {
+            let names = [];
+            let tasksCompletedList = [];
+            const response = await fetch(dataUrl);
+            const text = await response.text();
+            const rows = text.split('\n');
+            rows.forEach(row => {
+                let colums = row.split(',');
+                let name = colums[2];
+                let tasksCompleted = colums[3];
+                names.push(name);
+                tasksCompletedList.push(parseInt(tasksCompleted));
+                
+            })
+            // console.table(tasksCompletedList);
+            return { names, tasksCompletedList };
+        }
+
+        async function chartPlot() {
+            let { names, tasksCompletedList } =  await getData('./temp.csv');
+            let ctx = document.getElementById('chart1').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: names,
+                    datasets: [{
+                        label: '# of Tasks Completed',
+                        data: tasksCompletedList,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1, 
+                    }]
+                },
+                options: {
+                    resposive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }]
+                    }
+                }
+            })
+        }
+
+        
+
+    </script>
+
+</body>
+
+</html>

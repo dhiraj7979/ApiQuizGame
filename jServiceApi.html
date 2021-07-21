@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions</title>
+    <style>
+        #heading1 {
+            text-align: center;
+        }
+        #question {
+            color: goldenrod;
+            font-family: Poppins;
+            margin: 20px 20px;
+            font-size: 20px;
+            font-style: italic;
+        }
+        #answer {
+            color: green;
+            font-family: Poppins;
+            font-style: normal;
+            font-size: 20px;
+            margin: 20px 20px;
+            visibility: hidden;
+        }
+        #show-ans-btn {
+            outline: none;
+            border: none;
+            color: antiquewhite;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 5px;
+            display: block;
+            background-color: black;
+            margin: auto;
+            transition: transform 0.6s;
+        }
+        #show-ans-btn:hover,
+        #show-ans-btn:active {
+            color: tomato;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    
+    <h2 id="heading1">Quiz Question</h2>
+    <p id="question" >question loading...</p>
+    <button id="show-ans-btn" onclick=showAnser() >Show Answer</button>
+    <p id="answer" ></p>
+
+    <script>
+        apiUrl = 'http://jservice.io/api/category?id=25';
+        // id 25 is for science category questions.
+
+        async function getQuestion() {
+            const response = await fetch(apiUrl);
+            const json = await response.json();
+            console.log(json);
+
+            let randomNumber = Math.round(Math.random()*249);
+            document.getElementById('question').innerHTML = json.clues[randomNumber].question;
+            document.getElementById('answer').innerHTML = "Answer: " + json.clues[randomNumber].answer;
+        }
+
+        getQuestion();
+
+
+        function showAnser() {
+            document.getElementById('answer').style.visibility = "visible";
+        }
+
+    </script>
+
+</body>
+</html>
